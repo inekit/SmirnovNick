@@ -1,0 +1,502 @@
+Однотабличные запросы 
+
+1 
+SELECT name,surname 
+FROM students 
+where score between 2 and 5 
+
+1 
+SELECT name,surname 
+FROM students 
+where score >2 and score <5 
+
+2 
+SELECT name,surname 
+FROM students 
+where "N-GR" >1999 
+
+SELECT name,surname,"N-GR" 
+from students 
+where "N-GR" like '2___' 
+
+3 
+SELECT name,surname,"N-GR" 
+from students 
+where to_char(BDT, 'YYYY') like '2___' 
+
+4 
+SELECT name,surname,"N-GR" 
+from students 
+where to_char(BDT, 'MONTH')=JUNE 
+
+5 
+SELECT name,surname,"N-GR" 
+from students 
+where to_char(BDT, 'MONTH')=to_char(sysdate, 'MONTH') 
+
+6 
+SELECT name,surname,"N-GR" 
+from students 
+order by "N-GR" 
+
+7 
+SELECT name,surname,"N-GR" 
+from (SELECT name,surname,"N-GR" 
+FROM students 
+ORDER BY surname DESC) 
+order by "N-GR" 
+
+8 
+SELECT name,surname 
+from students 
+where score>4 
+order by score 
+
+9 
+SELECT name,surname 
+FROM students 
+ORDER BY score DESC FETCH FIRST 5 ROWS ONLY 
+
+10 
+SELECT CASE 
+WHEN risk between 7 and 11 THEN 'очень высокий' 
+WHEN risk between 5 and 8 THEN 'высокий' 
+WHEN risk between 3 and 6 THEN 'средний' 
+WHEN risk between 1 and 4 THEN 'внизкий' 
+WHEN risk <2 THEN 'очень низкий' 
+ELSE 'no match' 
+END 
+FROM hobbies 
+
+
+Групповые функции 
+1 
+SELECT COUNT(distinct concat('name','surname')),"N-GR" 
+FROM students 
+group by "N-GR" 
+
+2 
+SELECT AVG(score),"N-GR" 
+FROM students 
+group by "N-GR"
+3
+SELECT COUNT(name),surname
+FROM students  
+group by surname
+4
+SELECT COUNT(concat(name,surname)),to_char(BDT, 'YYYY')
+FROM students  
+group by to_char(BDT, 'YYYY')
+
+5
+SELECT AVG(score),substr("N-GR",1,1)
+FROM students  
+group by substr("N-GR",1,1)
+
+6
+SELECT max(AVG(score))
+FROM students   
+group by "N-GR"
+having  substr("N-GR",1,1)=2;
+
+7
+SELECT AVG(score),"N-GR"
+FROM students   
+group by "N-GR"
+having  AVG(score)>=3.5
+order by AVG(score);
+ 
+8
+SELECT name,risk
+FROM hobbies  
+order by risk desc fetch first 3 rows only;
+
+9
+SELECT count(name),max(score),AVG(score),min(score),"N-GR" 
+FROM students    
+group by "N-GR"
+
+10
+select concat(name,surname),score
+from students
+where score=
+(
+SELECT max(score)
+FROM students 
+where "N-GR"=2281
+) and "N-GR"=2281
+
+11
+select s.N_GROUP,N_Z,NAME,SURNAME,SCORE from
+(
+select max(score) sc,n_group from students$
+group by n_group
+) a,students$ s
+where a.n_group=s.n_group and sc=score
+
+
+
+
+Многотабличные запросы
+1
+SELECT students$.N_z,
+       students$.Name,
+       students$.Surname,
+       hobbies$.Name
+FROM students$,
+     students_hobbies$,hobbies$
+WHERE students$.N_z= students_hobbies$.N_z
+and hobbies$.id= students_hobbies$.id;
+2
+SELECT students$.N_z, 
+       students$.Name, 
+  students$.Surname, 
+  hobbies$.Name, 
+ students_hobbies$.date_start 
+ FROM students$, 
+ students_hobbies$,hobbies$ 
+ WHERE students$.N_z= students_hobbies$.N_z 
+and hobbies$.id= students_hobbies$.id 
+and students_hobbies$.date_start=( 
+ SELECT min(students_hobbies$.date_start)  
+ FROM students_hobbies$  )
+3
+select max(name),max(surname),max(N_z),max(date_birth)
+from(
+select s.n_z,s.nAME,s.surname,S.SCORE,h.risk,s.date_birth
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z and s.score>(select avg(score) from students$)
+)
+group by N_Z 
+having sum(risk)>0.9
+ORDER BY sum(risk) DESC;
+
+4
+select s.surname,s.nAME,s.n_z,s.date_birth,h.name,trunc(MONTHS_BETWEEN(sh.date_finish,sh.date_start),0)
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z and sh.date_finish<sysdate
+5
+select max(s.surname),max(s.nAME),max(s.n_z),max(s.date_birth),count(h.name)
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z  and trunc(MONTHS_BETWEEN(sysdate,s.date_birth),0)>19*12 and  date_finish>sysdate
+group by s.n_z
+having  count(h.name)>0
+6
+select avg("MAX(S.SCORE)")
+from (
+select max(s.score),max(s.n_group)
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z and date_finish>sysdate
+group by s.n_z
+)
+group by "MAX(S.N_GROUP)"
+7
+select h.name,h.risk, trunc(MONTHS_BETWEEN(sh.date_finish,sh.date_start),0),s.n_z,s.n_group
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z and date_finish>sysdate
+order by trunc(MONTHS_BETWEEN(sh.date_finish,sh.date_start),0) desc fetch first 1 rows only
+8
+select h.name,h.id
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z  and s.score=(select max(s.score) from students$ s)
+9
+select h.name,h.id
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z  and  s.score=3 and n_group like '2___' and date_finish>sysdate
+10
+select a.b n_k
+from 
+(select count(n) a,substr("MAX(S.N_GROUP)",1,1) b
+from(
+select max(s.name),max(s.surname),
+CASE
+        WHEN count(h.name)> 1 THEN count(h.name)
+        ELSE   null
+    END
+ n,
+max(s.n_group),max(s.n_z)
+
+ from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z and sh.date_finish>sysdate
+group by s.n_z 
+) a
+group by substr("MAX(S.N_GROUP)",1,1) 
+)a,
+(
+select count("MAX(S.N_Z)") a,substr("MAX(S.N_GROUP)",1,1) b
+from(
+select max(s.name),max(s.surname),count(h.name),max(s.n_group),max(s.n_z)
+
+ from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z 
+group by s.n_z 
+)
+group by substr("MAX(S.N_GROUP)",1,1)
+) b
+where a.b=b.b and a.a/b.a>0.5
+11
+select a.n N_GR
+from (
+select count(a.score) score,max(a.n_group) n
+from (
+select
+CASE
+        WHEN s.score> 4 THEN s.score
+        ELSE   null
+    END score,
+s.n_group
+
+ from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z)a
+group by a.n_group
+) a,
+(
+select count(a.score) score,max(a.n_group) n
+from (
+select
+s.score score,
+s.n_group
+
+ from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z)a
+group by a.n_group
+) b
+where b.n=a.n and a.score/b.score>0.6
+12
+select s.a N_C, 
+case when c.b is not null then c.b
+else 0 end nmbr
+from 
+(select 0,SUBSTR(N_GROUP,1,1) a from
+students$
+group by SUBSTR(N_GROUP,1,1)
+)s,(
+select count(DISTINCT h.id) b, substr(n_group,1,1) a
+ from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z and date_finish>sysdate
+group by substr(n_group,1,1)
+) c
+where s.a=c.a (+)
+13
+select s.n_z n_z,surname,name,date_birth,substr(n_group,1,1)
+ from students_hobbies$ sh,students$ s
+where   sh.N_Z(+)=s.N_Z and id is null and score=5
+order by  SUBSTR(N_GROUP,1,1) , DATE_BIRTH desc
+14
+create or replace view "STUDENTS_V1" as
+select *
+ from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z and date_finish>sysdate and months_between(sysdate,date_start)>5*12;
+15
+select name,count(n_z)
+ from hobbies$ h,students_hobbies$ sh
+where  sh.hobby_id(+)=h.id 
+group by name
+16
+select max(h.id) id
+ from hobbies$ h,students_hobbies$ sh
+where  sh.hobby_id(+)=h.id 
+group by name
+order by count(n_z) desc fetch  first 1 rows only
+17
+select *
+ from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z 
+and sh.id=
+(
+select max(h.id)
+ from hobbies$ h,students_hobbies$ sh
+where  sh.hobby_id(+)=h.id 
+group by name
+order by count(n_z) desc fetch  first 1 rows only)
+18
+select id
+ from hobbies$ h
+order by risk desc fetch first 3 rows only
+19
+select max(s.name),max(surname),min(date_start)
+ from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z and date_finish>sysdate
+group by s.n_z
+order by min(date_start) fetch first 10 rows only
+20
+select gr from(
+select max(s.name),max(surname),min(date_start),min(n_group) gr
+ from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z and date_finish<sysdate
+group by s.n_z
+order by min(date_start) fetch first 10 rows only
+)
+group by gr
+21
+create or replace view "STUDENTS_V2" as
+select n_z,name,surname
+from students$
+order by score desc;
+22
+create or replace view "STUDENTS_V3" as
+select p nbr_pers,nh n_hobby,b.crs from
+(select max(pop) p,crs
+from (
+select count(s.n_z) pop,max(h.id) nh,max(substr(s.n_group,1,1)) crs
+ from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z 
+group by substr(s.n_group,1,1), h.id)
+group by crs) a, 
+(select count(s.n_z) pop,max(h.id) nh,max(substr(s.n_group,1,1)) crs
+ from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z 
+group by substr(s.n_group,1,1), h.id) b
+where a.crs=b.crs and p=pop
+order by crs
+23
+create or replace view "STUDENTS_V4" as
+select a."MAX(H.ID)" h_id from(
+select count(s.n_z),max(h.id),max(risk)
+ from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z and substr(n_group,1,1)=2
+group by h.id
+order by count(s.n_z) desc,max(risk) desc fetch first 1 rows only) a,
+(
+select count(s.n_z),max(h.id),max(risk)
+ from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z  and substr(n_group,1,1)=2
+group by h.id
+order by count(s.n_z) desc,max(risk) desc) b
+where a."COUNT(S.N_Z)"=b."COUNT(S.N_Z)" and a."MAX(RISK)"=b."MAX(RISK)"
+24
+create or replace view "STUDENTS_V5" as
+select a.count cnt_st,b.count cnt_st_having5, a.n_c from(
+select count(s.n_z) count, substr(n_group,1,1) n_c
+ from students$ s
+group by substr(n_group,1,1)) a,
+(
+select count(s.n_z) count, substr(n_group,1,1) n_c
+ from students$ s
+where score=5
+group by substr(n_group,1,1)) b
+where a.n_c=b.n_c
+25
+create or replace view "STUDENTS_V6" as
+select h.id
+ from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z 
+group by h.id
+order by count(s.n_z) desc fetch first 1 rows only
+26
+CREATE OR REPLACE VIEW V7 AS
+SELECT N_z, Surname FROM Students
+WITH CHECK OPTION
+27
+create view v8 as
+sELECT lower(substr(name,1,1)) letter,score FROM Students$
+UNION
+sELECT lower(substr(name,2,1)) letter,score FROM Students$
+UNION
+sELECT lower(substr(name,3,1)) letter,score FROM Students$
+UNION
+sELECT lower(substr(name,4,1)) letter,score FROM Students$
+UNION
+sELECT lower(substr(name,5,1)) letter,score FROM Students$
+UNION
+sELECT lower(substr(name,6,1)) letter,score FROM Students$
+//
+//
+//
+//
+select letter,max(score),avg(score),min(score) from v8
+group by letter having max(score)>3.6
+28
+select substr(n_group,1,1),surname,max(score),min(score) from students$
+group by surname, substr(n_group,1,1)
+29
+select count(h.name),to_char(DATE_BIRTH,'yyyy')
+ from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z 
+group by to_char(DATE_BIRTH,'yyyy')
+30
+create view v9 as
+sELECT lower(substr(s.name,1,1)) letter,risk  
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z 
+union
+sELECT lower(substr(s.name,2,1)) letter,risk  
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z 
+union
+sELECT lower(substr(s.name,3,1)) letter,risk  
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z 
+union
+sELECT lower(substr(s.name,4,1)) letter,risk  
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z 
+union
+sELECT lower(substr(s.name,5,1)) letter,risk  
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z 
+union
+sELECT lower(substr(s.name,6,1)) letter,risk  
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z
+//
+//
+select letter,max(risk),min(risk) from v9
+group by letter
+order by letter
+31
+sELECT avg(score),to_char(DATE_BIRTH,'mm')
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z and h.name='Футбол'
+group by to_char(DATE_BIRTH,'mm')
+32
+sELECT max(s.name) name,max(surname) surname,max(n_group) n_group
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z 
+group by s.n_z
+33
+sELECT surname,decode(instr(surname,'ов',1,1),0,'не найдено',instr(surname,'ов',1,1))
+from students$ s
+34
+sELECT surname,rpad(surname,10,'#')
+from students$ s
+35
+sELECT rpad(surname,10,'#'),trim('#' from rpad(surname,10,'#'))
+from students$ s
+36
+sELECT last_day('01-APR-2018')
+from dual
+37
+select next_day(sysdate,'saturday') from dual
+38
+select to_char(sysdate,'cc'),to_char(sysdate,'ww'),to_char(sysdate,'ddd') from dual
+
+39
+select max(s.name),max(surname),max(h.name), case when max(date_finish)<sysdate then 'закончил' else 'занимается' end
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z 
+group by s.n_z
+40
+select n_group,count("2") "2",count("3") "3",count("4") "4",count("5") "5" from
+(
+select n_group
+,
+case when
+round(score,0)=2 then round(score,0)  else null
+end "2",
+case when
+round(score,0)=3 then round(score,0)  else null
+end "3",
+case when
+round(score,0)=4 then round(score,0)  else null
+end "4",
+case when
+round(score,0)=5 then round(score,0)  else null
+end "5"
+
+from hobbies$ h,students_hobbies$ sh,students$ s
+where  sh.hobby_id=h.id and sh.N_Z=s.N_Z 
+)
+group by n_group
+
+
