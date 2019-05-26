@@ -1,0 +1,141 @@
+2
+INSERT INTO `Employees` ( `Initials`, `post`, `passport`, `home_adress`, `h_phone`, `m_phone`)
+VALUES ('Никита Смирнов','Актер','4111 6111111','Боголюбова 29','2193339','89298886622');
+
+INSERT INTO `Performanes` ( `Name`, `Author`, `Pr_year`, `Gerne`, `Acts_number`, `Plot`)
+VALUES ('Ромео и дульетта','Шекспир','1600','Драма','6','Между знатными веронскими семействами Монтекки и Капулетти идёт вражда. 
+На балу в доме Капулетти взгляды Ромео и Джульетты впервые пересекаются, и, подобно ослепительной молнии, их поражает любовь. 
+А Ромео, видя, что она мертва, и не зная, что это лишь сон, выпивает яд. Джульетта просыпается и в отчаянии, видя его труп, закалывает себя. Над телами своих детей забывают о кровавой вражде главы семейств Монтекки и Капулетти. ');
+
+INSERT INTO `Actors` (`Emp_id`, `Perf_id`, `Role`, `Perf_date`)
+VALUES ('6','2','Лаэрт','2018-11-29');
+
+INSERT INTO `Shedle` (`Perf_id`, `Perf_dtime`, `Price`)
+VALUES ('3','2019-11-30T12:00:00.000','3000');
+
+INSERT INTO `Inventary` (`Type`, `Name`, `Perf_id`)
+VALUES ('Декорации','Балкон','3');
+3
+select * from Employees
+where id=3;
+
+select * from Performanes
+where id=3; 
+
+select * from Actors
+where id=78;
+
+select * from Shedle
+where id=3; 
+
+select * from Inventary
+where Inv_nmbr=1;
+
+4
+update Performanes
+set Acts_number=5
+where id=3;
+
+update Actors
+set Role='Петр 1'
+where id=3;
+
+update Employees
+set post='Директор'
+where id=3;
+
+update Shedle
+set price=3200
+where id=3;
+
+update Inventary
+set type='Инвентарь' , name='Стол'
+where Inv_nmbr=3;
+
+5
+DELETE
+FROM Actors
+WHERE id = 3;
+
+DELETE
+FROM Performanes
+WHERE id = 7;
+
+DELETE
+FROM Employees
+WHERE id = 11;
+
+DELETE
+FROM Performanes
+WHERE id = 11;
+
+DELETE
+FROM Inventary
+WHERE id = 3;
+
+DELETE
+FROM Shedle
+WHERE id = 3;
+
+6
+select post,count(id) from Employees
+group by post;
+
+7
+select * from Actors
+where  DATEDIFF(perf_date,Curdate())<=7 and DATEDIFF(perf_date,Curdate())>=0
+8
+
+9
+select count(Perf_dtime )
+from Inventary i,Shedle s 
+where i.Perf_id=s.Perf_id 
+and Inv_nmbr=1 
+and  DATE_ADD(sysdate(),INTERVAL 1 month)>Perf_dtime 
+and sysdate()<Perf_dtime
+
+10
+select gerne,avg(price) from Performanes p, Shedle s 
+where p.id=s.perf_id
+group by Gerne;
+
+11
+Вывети мобиьные и если нет домашние теефоны актеров, которые дожны играть в  спектакле в бижайшие 3 дня
+select max(Initials) name,
+case when max(m_phone) is not null then max(m_phone) else max(h_phone) end phone
+from Actors a, Employees e 
+where a.perf_date>=Curdate() 
+and DATE_ADD(Curdate(),INTERVAL 3 day)>a.Perf_date 
+group by e.id
+
+Вывети актеров, которые игаи тоько в пьесах, написанных до 1600 года
+select max(initials) from Performanes p, Actors a,Employees e 
+where p.id=a.Perf_id and e.id=a.Emp_id and Pr_year<1600 and Perf_date<curdate()
+group by e.id
+
+Вывести настоящие имена 3х Ромео И джульетт, которые боьше всего выступаи вместе
+select e.Initials Romeo,e1.Initials Juliette,count(*) from Actors a,Actors b ,Employees e,Employees e1
+where a.role like 'Ромео%' 
+and b.role like 'Джульетта%' 
+and a.Perf_date=b.Perf_date 
+and a.Perf_id=b.Perf_id and (b.Perf_id=3 or b.Perf_id=6)
+and e.id=a.Emp_id 
+and e1.id=b.Emp_id
+group by e.Initials,e1.Initials
+order by count(*) desc limit 3
+
+
+Вывести ве спектакли 'Гамет' на бижайший месяц, которые будут проходить в выходные с 5 до 10 поле поудня
+select * from Performanes p ,Shedle s where p.id=s.perf_id
+And DATEDIFF(perf_dtime,Curdate())<=360 
+and DATEDIFF(perf_dtime,Curdate())>=0 
+and name='Гамлет' 
+and (DAYNAME(perf_dtime)='Saturday' or DAYNAME(perf_dtime)='Sunday')
+
+Вывести в скоьки разичных представлениях актеры смогли  поучавствовал за последний месяц
+select Emp_id,max(initials),count(distinct Perf_id) from Actors a,Employees e
+where e.id=a.emp_id
+AND Emp_id is not null
+AND date_sub(curtime(),INTERVAL 1 month)<Perf_date and curtime()>Perf_date
+group by Emp_id
+
