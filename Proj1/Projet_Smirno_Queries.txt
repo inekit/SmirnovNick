@@ -90,7 +90,7 @@ where  DATEDIFF(perf_date,Curdate())<=7 and DATEDIFF(perf_date,Curdate())>=0 and
 select count(distinct Perf_dtime )
 from Inventary i,Shedle s 
 where i.Perf_id=s.Perf_id 
-and Inv_nmbr=1 
+and Inv_nmbr=10 
 and  DATE_ADD(sysdate(),INTERVAL 1 month)>Perf_dtime 
 and sysdate()<Perf_dtime
 
