@@ -87,7 +87,7 @@ where  DATEDIFF(perf_date,Curdate())<=7 and DATEDIFF(perf_date,Curdate())>=0 and
 8
 
 9
-select count(Perf_dtime )
+select count(distinct Perf_dtime )
 from Inventary i,Shedle s 
 where i.Perf_id=s.Perf_id 
 and Inv_nmbr=1 
