@@ -83,7 +83,7 @@ group by post;
 
 7
 select * from Actors
-where  DATEDIFF(perf_date,Curdate())<=7 and DATEDIFF(perf_date,Curdate())>=0 and id=1
+where  DATEDIFF(perf_date,Curdate())<=7 and DATEDIFF(perf_date,Curdate())>=0 and id=4
 8
 
 9
