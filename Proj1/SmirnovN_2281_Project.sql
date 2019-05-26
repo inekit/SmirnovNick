@@ -1,5 +1,5 @@
 -- MySQL Workbench Synchronization
--- Generated: 2019-05-25 19:01
+-- Generated: 2019-05-26 17:27
 -- Model: New Model
 -- Version: 1.0
 -- Project: Name of the project
@@ -9,10 +9,10 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
-ALTER SCHEMA `nicklzx`  DEFAULT CHARACTER SET utf8  DEFAULT COLLATE utf8_general_ci ;
+CREATE SCHEMA IF NOT EXISTS `mydv` DEFAULT CHARACTER SET utf8 ;
 
-CREATE TABLE IF NOT EXISTS `nicklzx`.`Employees` (
-  `id` INT(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `mydv`.`Employees` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `Initials` VARCHAR(45) NULL DEFAULT NULL,
   `post` VARCHAR(45) NULL DEFAULT NULL,
   `passport` VARCHAR(45) NULL DEFAULT NULL,
@@ -23,11 +23,11 @@ CREATE TABLE IF NOT EXISTS `nicklzx`.`Employees` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS `nicklzx`.`Performanes` (
+CREATE TABLE IF NOT EXISTS `mydv`.`Performanes` (
   `id` INT(11) NOT NULL,
   `Name` VARCHAR(45) NULL DEFAULT NULL,
+  `Pr_year` INT(11) NULL DEFAULT NULL,
   `Author` VARCHAR(45) NULL DEFAULT NULL,
-  `Pr_year` YEAR NULL DEFAULT NULL,
   `Gerne` VARCHAR(45) NULL DEFAULT NULL,
   `Acts_number` INT(11) NULL DEFAULT NULL,
   `Plot` LONGTEXT NULL DEFAULT NULL,
@@ -35,53 +35,53 @@ CREATE TABLE IF NOT EXISTS `nicklzx`.`Performanes` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS `nicklzx`.`Actors` (
-  `id` INT(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `mydv`.`Actors` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `Emp_id` INT(11) NOT NULL,
   `Perf_id` INT(11) NOT NULL,
   `Role` VARCHAR(45) NULL DEFAULT NULL,
   `Perf_date` DATE NULL DEFAULT NULL,
-  INDEX `fk_Employees_has_Emp_perf_Emp_perf1_idx` (`Perf_id` ASC),
-  INDEX `fk_Employees_has_Emp_perf_Employees_idx` (`Emp_id` ASC),
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_Employees_has_Emp_perf_Employees`
+  INDEX `fk_Actors_Employees1_idx` (`Emp_id` ASC) ,
+  INDEX `fk_AcSh_Performanes1_idx` (`Perf_id` ASC) ,
+  CONSTRAINT `fk_Actors_Employees1`
     FOREIGN KEY (`Emp_id`)
-    REFERENCES `nicklzx`.`Employees` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Employees_has_Emp_perf_Emp_perf1`
+    REFERENCES `mydv`.`Employees` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
+  CONSTRAINT `fk_AcSh_Performanes1`
     FOREIGN KEY (`Perf_id`)
-    REFERENCES `nicklzx`.`Performanes` (`id`)
+    REFERENCES `mydv`.`Performanes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS `nicklzx`.`Inventary` (
-  `Inv_nmbr` INT(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `mydv`.`Inventary` (
+  `Inv_nmbr` INT(11) NOT NULL AUTO_INCREMENT,
   `Type` VARCHAR(45) NULL DEFAULT NULL,
   `Name` VARCHAR(45) NULL DEFAULT NULL,
   `Perf_id` INT(11) NOT NULL,
   PRIMARY KEY (`Inv_nmbr`),
-  INDEX `fk_Performanes_has_table3_Performanes1_idx` (`Perf_id` ASC),
-  CONSTRAINT `fk_Performanes_has_table3_Performanes1`
+  INDEX `fk_Inventary_Performanes1_idx` (`Perf_id` ASC) ,
+  CONSTRAINT `fk_Inventary_Performanes1`
     FOREIGN KEY (`Perf_id`)
-    REFERENCES `nicklzx`.`Performanes` (`id`)
+    REFERENCES `mydv`.`Performanes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS `nicklzx`.`Shedle` (
+CREATE TABLE IF NOT EXISTS `mydv`.`Shedle` (
   `id` INT(11) NOT NULL,
   `Perf_id` INT(11) NOT NULL,
+  `price` INT(11) NULL DEFAULT NULL,
   `Perf_dtime` DATETIME NULL DEFAULT NULL,
-  `Price` INT(11) NULL DEFAULT NULL,
-  INDEX `fk_table1_Performanes1_idx` (`Perf_id` ASC),
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_table1_Performanes1`
+  INDEX `fk_Shedle_Performanes1_idx` (`Perf_id` ASC) ,
+  CONSTRAINT `fk_Shedle_Performanes1`
     FOREIGN KEY (`Perf_id`)
-    REFERENCES `nicklzx`.`Performanes` (`id`)
+    REFERENCES `mydv`.`Performanes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
