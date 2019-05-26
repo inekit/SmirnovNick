@@ -126,7 +126,7 @@ order by count(*) desc limit 3
 
 
 
-Вывести ве спектакли 'Гамет' на бижайший месяц, которые будут проходить в выходные с 5 до 10 поле поудня
+Вывести ве спектакли 'Гамет' на бижайший месяц, которые будут проходить в выходные
 select * from Performanes p ,Shedle s where p.id=s.perf_id
 And DATEDIFF(perf_dtime,Curdate())<=360 
 and DATEDIFF(perf_dtime,Curdate())>=0 
