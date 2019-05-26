@@ -78,8 +78,10 @@ FROM Shedle
 WHERE id = 3;
 
 6
-select post,count(id) from Employees
-group by post;
+select e.Initials,e.post,count(e1.post) 
+from Employees e,Employees e1 
+where e.post=e1.post and e1.post=e.post 
+group by e.id
 
 7
 select * from Actors
