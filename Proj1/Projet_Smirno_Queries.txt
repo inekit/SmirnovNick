@@ -1,20 +1,20 @@
-2
+﻿2
 INSERT INTO `Employees` ( `Initials`, `post`, `passport`, `home_adress`, `h_phone`, `m_phone`)
-VALUES ('Íèêèòà Ñìèðíîâ','Àêòåð','4111 6111111','Áîãîëþáîâà 29','2193339','89298886622');
+VALUES ('Никита Смирнов','Актер','4111 6111111','Боголюбова 29','2193339','89298886622');
 
 INSERT INTO `Performanes` ( `Name`, `Author`, `Pr_year`, `Gerne`, `Acts_number`, `Plot`)
-VALUES ('Ðîìåî è äóëüåòòà','Øåêñïèð','1600','Äðàìà','6','Ìåæäó çíàòíûìè âåðîíñêèìè ñåìåéñòâàìè Ìîíòåêêè è Êàïóëåòòè èä¸ò âðàæäà. 
-Íà áàëó â äîìå Êàïóëåòòè âçãëÿäû Ðîìåî è Äæóëüåòòû âïåðâûå ïåðåñåêàþòñÿ, è, ïîäîáíî îñëåïèòåëüíîé ìîëíèè, èõ ïîðàæàåò ëþáîâü. 
-À Ðîìåî, âèäÿ, ÷òî îíà ìåðòâà, è íå çíàÿ, ÷òî ýòî ëèøü ñîí, âûïèâàåò ÿä. Äæóëüåòòà ïðîñûïàåòñÿ è â îò÷àÿíèè, âèäÿ åãî òðóï, çàêàëûâàåò ñåáÿ. Íàä òåëàìè ñâîèõ äåòåé çàáûâàþò î êðîâàâîé âðàæäå ãëàâû ñåìåéñòâ Ìîíòåêêè è Êàïóëåòòè. ');
+VALUES ('Ромео и дульетта','Шекспир','1600','Драма','6','Между знатными веронскими семействами Монтекки и Капулетти идёт вражда. 
+На балу в доме Капулетти взгляды Ромео и Джульетты впервые пересекаются, и, подобно ослепительной молнии, их поражает любовь. 
+А Ромео, видя, что она мертва, и не зная, что это лишь сон, выпивает яд. Джульетта просыпается и в отчаянии, видя его труп, закалывает себя. Над телами своих детей забывают о кровавой вражде главы семейств Монтекки и Капулетти. ');
 
 INSERT INTO `Actors` (`Emp_id`, `Perf_id`, `Role`, `Perf_date`)
-VALUES ('6','2','Ëàýðò','2018-11-29');
+VALUES ('6','2','Лаэрт','2018-11-29');
 
 INSERT INTO `Shedle` (`Perf_id`, `Perf_dtime`, `Price`)
 VALUES ('3','2019-11-30T12:00:00.000','3000');
 
 INSERT INTO `Inventary` (`Type`, `Name`, `Perf_id`)
-VALUES ('Äåêîðàöèè','Áàëêîí','3');
+VALUES ('Декорации','Балкон','3');
 3
 select * from Employees
 where id=3;
@@ -37,11 +37,11 @@ set Acts_number=5
 where id=3;
 
 update Actors
-set Role='Ïåòð 1'
+set Role='Петр 1'
 where id=3;
 
 update Employees
-set post='Äèðåêòîð'
+set post='Директор'
 where id=3;
 
 update Shedle
@@ -49,7 +49,7 @@ set price=3200
 where id=3;
 
 update Inventary
-set type='Èíâåíòàðü' , name='Ñòîë'
+set type='Инвентарь' , name='Стол'
 where Inv_nmbr=3;
 
 5
@@ -100,7 +100,7 @@ where p.id=s.perf_id
 group by Gerne;
 
 11
-Âûâåòè ìîáèüíûå è åñëè íåò äîìàøíèå òååôîíû àêòåðîâ, êîòîðûå äîæíû èãðàòü â  ñïåêòàêëå â áèæàéøèå 3 äíÿ
+Вывети мобиьные и если нет домашние теефоны актеров, которые дожны играть в  спектакле в бижайшие 3 дня
 select max(Initials) name,
 case when max(m_phone) is not null then max(m_phone) else max(h_phone) end phone
 from Actors a, Employees e 
@@ -108,34 +108,61 @@ where a.perf_date>=Curdate()
 and DATE_ADD(Curdate(),INTERVAL 3 day)>a.Perf_date 
 group by e.id
 
-Âûâåòè àêòåðîâ, êîòîðûå èãàè òîüêî â ïüåñàõ, íàïèñàííûõ äî 1600 ãîäà
+Вывети актеров, которые игаи тоько в пьесах, написанных до 1600 года
 select max(initials) from Performanes p, Actors a,Employees e 
 where p.id=a.Perf_id and e.id=a.Emp_id and Pr_year<1600 and Perf_date<curdate()
 group by e.id
 
-Âûâåñòè íàñòîÿùèå èìåíà 3õ Ðîìåî È äæóëüåòò, êîòîðûå áîüøå âñåãî âûñòóïàè âìåñòå
+Вывести настоящие имена 3х Ромео И джульетт, которые боьше всего выступаи вместе
 select e.Initials Romeo,e1.Initials Juliette,count(*) from Actors a,Actors b ,Employees e,Employees e1
-where a.role like 'Ðîìåî%' 
-and b.role like 'Äæóëüåòòà%' 
+where a.role like 'Ромео%' 
+and b.role like 'Джульетта%' 
 and a.Perf_date=b.Perf_date 
-and a.Perf_id=b.Perf_id and (b.Perf_id=3 or b.Perf_id=6)
+and a.Perf_id=b.Perf_id and (b.Perf_id=3)
 and e.id=a.Emp_id 
 and e1.id=b.Emp_id
 group by e.Initials,e1.Initials
 order by count(*) desc limit 3
 
- 
-Âûâåñòè âå ñïåêòàêëè 'Ãàìåò' íà áèæàéøèé ìåñÿö, êîòîðûå áóäóò ïðîõîäèòü â âûõîäíûå ñ 5 äî 10 ïîëå ïîóäíÿ
+
+
+Вывести ве спектакли 'Гамет' на бижайший месяц, которые будут проходить в выходные с 5 до 10 поле поудня
 select * from Performanes p ,Shedle s where p.id=s.perf_id
 And DATEDIFF(perf_dtime,Curdate())<=360 
 and DATEDIFF(perf_dtime,Curdate())>=0 
-and name='Ãàìëåò' 
+and name='Гамлет' 
 and (DAYNAME(perf_dtime)='Saturday' or DAYNAME(perf_dtime)='Sunday')
 
-Âûâåñòè â ñêîüêè ðàçè÷íûõ ïðåäñòàâëåíèÿõ àêòåðû ñìîãëè  ïîó÷àâñòâîâàë çà ïîñëåäíèé ìåñÿö
+Вывести в скоьки разичных представлениях актеры смогли  поучавствовал за последний месяц
 select Emp_id,max(initials),count(distinct Perf_id) from Actors a,Employees e
 where e.id=a.emp_id
 AND Emp_id is not null
 AND date_sub(curtime(),INTERVAL 1 month)<Perf_date and curtime()>Perf_date
 group by Emp_id
+12
+Перетоcовать всех актеров, играющих в ближайший день по новым труппам
+update Actors a inner JOIN Actors b on a.Role=b.Role 
+set a.Emp_id= b.Emp_id
+where a.Emp_id<> b.Emp_id and a.Perf_date<date_add(curdate(),INTERVAL 1 day) and a.id>0
 
+Увеличить цену билетов на шекспира вдвое в его день рождения(26 апреля)
+update Performanes p inner JOIN Shedle s on s.Perf_id=p.id
+set price=2*price
+where  Author='Шекспир' and date_format(Perf_dtime,"%j")=date_format('2018-06-26 20:00:00',"%j")and s.id>0
+
+Устроить убощиками всех актеров, которые ни разу не выходили на сцену
+update Employees e left JOIN Actors a on a.Emp_id=e.id
+set post='Уборщик'
+where perf_id is null and post='Актер' and a.id>0
+13
+удалить инфорацию обо всех предтавениях, прошедших более года назад
+delete from Actors
+where Perf_date<date_sub(curdate(),INTERVAL 1 year)
+
+избавится от лишнего инвентаря, который не нужен в спектакях
+delete from Inventary
+where Perf_id is null
+
+удалить из бд актеров, не учавствующих в представениях
+delete Employees from Employees left JOIN Actors a on a.Emp_id=Employees.id
+where  a.id is null  and Employees.post='Актер'
