@@ -137,7 +137,7 @@ and (DAYNAME(perf_dtime)='Saturday' or DAYNAME(perf_dtime)='Sunday')
 select Emp_id,max(initials),count(distinct Perf_id) from Actors a,Employees e
 where e.id=a.emp_id
 AND Emp_id is not null
-AND date_sub(curtime(),INTERVAL 1 month)<Perf_date and curtime()>Perf_date
+AND date_sub(sysdate(),INTERVAL 1 month)<Perf_date and sysdate()>Perf_date
 group by Emp_id
 12
 Перетоcовать всех актеров, играющих в ближайший день по новым труппам
