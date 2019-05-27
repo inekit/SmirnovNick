@@ -91,7 +91,7 @@ and a.Perf_date=cast(s.Perf_dtime as date)
 and emp_id=18
 
 И если есть дубликаты
-select distinct max(emp_id),max(a.Perf_id),Perf_dtime,max(Role) from Shedle s,Actors a
+select  max(Emp_id),max(a.Perf_id),Perf_dtime,max(Role) from Shedle s,Actors a
 where  DATEDIFF(Perf_dtime,Curdate())<=7 and DATEDIFF(Perf_dtime,Curdate())>=0 
 and s.Perf_id=a.Perf_id 
 and a.Perf_date=cast(s.Perf_dtime as date) 
