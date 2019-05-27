@@ -84,8 +84,11 @@ where e.post=e1.post and e1.post=e.post
 group by e.id
 
 7
-select * from Actors
-where  DATEDIFF(perf_date,Curdate())<=7 and DATEDIFF(perf_date,Curdate())>=0 and Emp_id=3
+select Emp_id,a.Perf_id,Perf_dtime,Role from Shedle s,Actors a
+where  DATEDIFF(Perf_dtime,Curdate())<=7 and DATEDIFF(Perf_dtime,Curdate())>=0 
+and s.Perf_id=a.Perf_id 
+and a.Perf_date=cast(s.Perf_dtime as date) 
+and emp_id=18
 8
 
 9
