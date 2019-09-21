@@ -1,0 +1,197 @@
+1
+DECLARE
+BEGIN
+dbms_output.put_line(sysdate()); 
+END;
+
+
+
+2
+DECLARE
+BEGIN
+dbms_output.put_line(sysdate()); 
+END;
+
+
+3
+DECLARE
+a int;
+b int;
+BEGIN
+a:=5;b:=1;
+dbms_output.put_line(a+b); 
+END;
+
+4 1
+DECLARE
+a int;
+b int;
+BEGIN
+a:=3;
+IF a=5 THEN dbms_output.put_line('Отлично'); 
+ELSIF a=4 THEN dbms_output.put_line('Хорошо'); 
+ELSIF a=3 THEN dbms_output.put_line('Удовлетворительно'); 
+ELSIF a=2 THEN dbms_output.put_line('Неуд'); 
+ELSE dbms_output.put_line('Неверная оценка'); 
+END IF;
+END;
+4 2
+DECLARE
+a int;
+b int;
+BEGIN
+a:=2;
+CASE a
+WHEN 5 THEN dbms_output.put_line('Отлично'); 
+WHEN 4 THEN dbms_output.put_line('Хорошо'); 
+WHEN 3 THEN dbms_output.put_line('Удовлетворительно'); 
+WHEN 2 THEN dbms_output.put_line('Неуд'); 
+ELSE dbms_output.put_line('Неверная оценка'); 
+END CASE;
+END;
+
+5 1
+DECLARE
+a int;
+b int;
+BEGIN
+a:=19;
+LOOP
+a:=a+1;
+dbms_output.put_line(a*a); 
+EXIT WHEN (a=33);
+END LOOP;
+END;
+5 2
+DECLARE
+a int;
+b int;
+BEGIN
+a:=19;
+While (a<33)
+LOOP
+a:=a+1;
+dbms_output.put_line(a*a); 
+END LOOP;
+END;
+5 3
+DECLARE
+a int;
+b int;
+BEGIN
+a:=20;
+For a IN 20..33 LOOP
+dbms_output.put_line(a*a); 
+END LOOP;
+END;
+
+
+1 1
+DECLARE
+a int;
+BEGIN
+a:=3;
+dbms_output.put_line(call(a)); 
+END;
+
+
+create or replace FUNCTION call (ca in number)
+RETURN NUMBER
+AS
+c NUMBER;
+BEGIN
+c:=ca;
+while (c<>1)
+LOOP
+if c mod 2 =0 then c:=c/2;
+elsif c mod 2 = 1 then c:=c*3+1;
+end if;
+dbms_output.put_line(c); 
+
+END LOOP;
+END;
+
+
+1 2
+
+DECLARE
+a int;
+BEGIN
+a:=3;
+callp(a);
+END;
+
+
+create or replace PROCEDURE callp (ca in number)
+AS
+c NUMBER;
+BEGIN
+c:=ca;
+while (c<>1)
+LOOP
+if c mod 2 =0 then c:=c/2;
+elsif c mod 2 = 1 then c:=c*3+1;
+end if;
+dbms_output.put_line(c); 
+
+END LOOP;
+END;
+2 1
+DECLARE
+a int;
+BEGIN
+a:=5;
+dbms_output.put_line(luc(a)); 
+END;
+
+create or replace FUNCTION luc (ca in number)
+RETURN NUMBER
+AS
+l0 NUMBER;
+l1 number;
+l number;
+i int;
+BEGIN
+l0:=2;
+l1:=1;
+i:=1;
+while (i<=ca-2)
+LOOP
+l:=l1+l0;
+l0:=l1;
+l1:=l;
+i:=i+1;
+END LOOP;
+return l;
+END;
+
+2 2
+DECLARE
+a int;
+BEGIN
+a:=5;
+lucp(a);
+END;
+
+
+create or replace PROCEDURE lucp (ca in number)
+AS
+l0 NUMBER;
+l1 number;
+l number;
+i int;
+BEGIN
+l0:=2;
+l1:=1;
+i:=1;
+dbms_output.put_line(l0); 
+dbms_output.put_line(l1); 
+while (i<=ca-2)
+LOOP
+l:=l1+l0;
+l0:=l1;
+l1:=l;
+i:=i+1;
+dbms_output.put_line(l); 
+END LOOP;
+END;
