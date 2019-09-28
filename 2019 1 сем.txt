@@ -226,7 +226,7 @@ END;
 create or replace PROCEDURE gam7
 AS
 cursor an is
- select count(a.id) a,max(f.id) f from animals a,species s,genus g,family f
+ select count(a.id) a,max(f.name) f from animals a,species s,genus g,family f
  where a.species_id=s.id and s.genus_id=g.id and f.id=g.family_id
  group by f.id;
 BEGIN
