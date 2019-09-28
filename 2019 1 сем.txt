@@ -234,3 +234,8 @@ for a in an loop
 dbms_output.put_line(a.a||'  '|| a.f);
 end loop;
 END;
+#9
+select child_id, av_id
+from childs c,animals a , AV_AN aa
+where c.parent_id=a.id and aa.an_id=c.child_id
+AND a.id=1
