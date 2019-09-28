@@ -28,11 +28,11 @@ a int;
 b int;
 BEGIN
 a:=3;
-IF a=5 THEN dbms_output.put_line('Отлично'); 
-ELSIF a=4 THEN dbms_output.put_line('Хорошо'); 
-ELSIF a=3 THEN dbms_output.put_line('Удовлетворительно'); 
-ELSIF a=2 THEN dbms_output.put_line('Неуд'); 
-ELSE dbms_output.put_line('Неверная оценка'); 
+IF a=5 THEN dbms_output.put_line('ГЋГІГ«ГЁГ·Г­Г®'); 
+ELSIF a=4 THEN dbms_output.put_line('Г•Г®Г°Г®ГёГ®'); 
+ELSIF a=3 THEN dbms_output.put_line('Г“Г¤Г®ГўГ«ГҐГІГўГ®Г°ГЁГІГҐГ«ГјГ­Г®'); 
+ELSIF a=2 THEN dbms_output.put_line('ГЌГҐГіГ¤'); 
+ELSE dbms_output.put_line('ГЌГҐГўГҐГ°Г­Г Гї Г®Г¶ГҐГ­ГЄГ '); 
 END IF;
 END;
 4 2
@@ -42,11 +42,11 @@ b int;
 BEGIN
 a:=2;
 CASE a
-WHEN 5 THEN dbms_output.put_line('Отлично'); 
-WHEN 4 THEN dbms_output.put_line('Хорошо'); 
-WHEN 3 THEN dbms_output.put_line('Удовлетворительно'); 
-WHEN 2 THEN dbms_output.put_line('Неуд'); 
-ELSE dbms_output.put_line('Неверная оценка'); 
+WHEN 5 THEN dbms_output.put_line('ГЋГІГ«ГЁГ·Г­Г®'); 
+WHEN 4 THEN dbms_output.put_line('Г•Г®Г°Г®ГёГ®'); 
+WHEN 3 THEN dbms_output.put_line('Г“Г¤Г®ГўГ«ГҐГІГўГ®Г°ГЁГІГҐГ«ГјГ­Г®'); 
+WHEN 2 THEN dbms_output.put_line('ГЌГҐГіГ¤'); 
+ELSE dbms_output.put_line('ГЌГҐГўГҐГ°Г­Г Гї Г®Г¶ГҐГ­ГЄГ '); 
 END CASE;
 END;
 
@@ -194,4 +194,30 @@ l1:=l;
 i:=i+1;
 dbms_output.put_line(l); 
 END LOOP;
+END;
+
+procedureasprocedureasprocedureasprocedureasprocedureasprocedureasprocedureasprocedureasprocedureasprocedureasprocedureasprocedureasprocedureas
+
+#4
+DECLARE
+BEGIN
+GAM();
+END;
+
+
+create or replace PROCEDURE gam
+AS
+cursor an is
+ select a_id,count(k_id) k,name
+ from k_a,animals a where a.id=k_a.a_id
+ group by a_id,name;
+BEGIN
+for a in an loop
+dbms_output.put_line(a.name||'  '|| a.k);
+end loop;
+END;
+#7
+DECLARE
+BEGIN
+GAM();
 END;
