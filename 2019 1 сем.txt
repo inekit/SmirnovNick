@@ -239,3 +239,34 @@ select child_id, av_id
 from childs c,animals a , AV_AN aa
 where c.parent_id=a.id and aa.an_id=c.child_id
 AND a.id=1
+
+
+
+
+#3
+create or replace PROCEDURE number3
+AS
+cursor an is
+ select * from animals;
+BEGIN
+for a in an loop
+if a.name is not null then
+dbms_output.put(a.name);
+end if;
+if a.birth is not null then
+dbms_output.put( ', '||a.birth);
+end if;
+if a.weight is not null then
+dbms_output.put( ', '||a.weight);
+end if;
+if a.length is not null then
+dbms_output.put( ', '||a.length );
+end if;
+if a.height is not null then
+dbms_output.put( ', '||a.height);
+end if;
+dbms_output.new_line;
+end loop;
+END;
+
+#4
