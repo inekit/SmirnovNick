@@ -281,3 +281,17 @@ end loop;
 dbms_output.new_line;
 END;
 
+#8
+
+create or replace PROCEDURE number8
+AS
+cursor an is
+ select name from animals a, k_a where a_id=a.id
+and finish_d<add_months(sysdate,1) and finish_d>sysdate;
+BEGIN
+for a in an loop
+dbms_output.put(a.name||', ');
+end loop;
+dbms_output.new_line;
+END;
+
