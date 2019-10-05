@@ -234,11 +234,6 @@ for a in an loop
 dbms_output.put_line(a.a||'  '|| a.f);
 end loop;
 END;
-#9
-select child_id, av_id
-from childs c,animals a , AV_AN aa
-where c.parent_id=a.id and aa.an_id=c.child_id
-AND a.id=1
 
 
 
@@ -295,3 +290,21 @@ end loop;
 dbms_output.new_line;
 END;
 
+#9
+create or replace PROCEDURE number9 (idd number)
+AS
+nb number;
+cursor an is
+ select b.name nm,av_id
+from childs c,animals a , AV_AN aa,animals b
+where c.parent_id=a.id and aa.an_id=c.child_id and b.id=c.child_id
+AND a.id=idd;
+BEGIN
+nb:=0;
+for a in an loop
+nb:=nb+1;
+dbms_output.put_line(a.nm ||' в вольере №' || a.av_id);
+end loop;
+if nb=0 then dbms_output.put_line('Нет детей'); 
+end if;
+END;
