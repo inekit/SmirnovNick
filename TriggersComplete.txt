@@ -14,5 +14,5 @@ EXCEPTION
   :new.name:=:old.name;
 END;
 #2
-CREATE or REPLACE VIEW viewtask2 AS SELECT g.id idguard, g.name guardname,a.id idan, a.name anname FROM animals a,guardians g/
+CREATE or REPLACE VIEW viewtask2 AS SELECT g.id gid, g.name gn,a.id aid, a.name an FROM animals a,guardians g /
 CREATE or REPLACE VIEW viewtask2 AS SELECT g.id idguard, g.name guardname,a.id idan, a.name anname FROM animals a,guardians g ,g_a where g.id=g_a.g_id and g_a.a_id=a.id
