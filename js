@@ -21,3 +21,18 @@ for (const key in lang)
 return maxn;
 }
 js vowels
+str=('abcdefghijklmnopqrstuvwxyz')
+console.log(vowels(str))
+function vowels(str) 
+{
+  str=str.toLowerCase()
+  lang = ['a', 'e','i', 'o', 'u']
+  let sum=0;
+  for(const i of str)
+  {
+    if (lang.indexOf( i ) != -1 ){sum+=1;}
+
+  }
+  return sum
+}
+js
