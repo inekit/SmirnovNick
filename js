@@ -35,4 +35,18 @@ function vowels(str)
   }
   return sum
 }
-js
+js piramide
+n=('7')
+vowels(n)
+function vowels(nbr) 
+{
+  for (let i = 0; i < nbr; i++)
+{ 
+  
+  console.log(' '.repeat(nbr-(2*i+1)/2)+'#'.repeat(2*i+1)+' '.repeat(nbr-(2*i+1)/2))
+}
+}
+String.prototype.repeat = function(n) {
+    return new Array(n+1).join(this);
+}
+js 
