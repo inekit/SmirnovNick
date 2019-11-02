@@ -1,0 +1,21 @@
+create or replace PROCEDURE lucp (ca in number)
+AS
+l0 NUMBER;
+l1 number;
+l number;
+i int;
+BEGIN
+l0:=2;
+l1:=1;
+i:=1;
+dbms_output.put_line(l0); 
+dbms_output.put_line(l1); 
+while (i<=ca-2)
+LOOP
+l:=l1+l0;
+l0:=l1;
+l1:=l;
+i:=i+1;
+dbms_output.put_line(l); 
+END LOOP;
+END;
