@@ -1,0 +1,6 @@
+DECLARE
+a int;
+BEGIN
+a:=3;
+pname();
+END;
