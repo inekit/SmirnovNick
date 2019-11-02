@@ -1,1 +1,10 @@
-
+create or replace PROCEDURE C1
+AS
+cursor a
+is
+select id,name from animals;
+BEGIN
+for i in a loop
+dbms_output.put_line('Под номером '|| i.id ||' ' || i.name);
+end loop;
+END;
