@@ -1,0 +1,11 @@
+create or replace PROCEDURE C7
+AS
+cursor a
+is
+select k.name kn , a.name an from animals a,  k_a, keepers k
+where k_a.a_id=a.id and k_a.k_id=k_id;
+BEGIN
+for i in a loop
+dbms_output.put_line(i.kn || ' ухаживает за ' || i.an);
+end loop;
+END;
