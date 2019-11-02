@@ -3,7 +3,7 @@ RETURN NUMBER
 AS
 c number;
 BEGIN
-select s.id into c
+select max(s.name) into c
 from animals a,species s
 where s.id=a.species_id
 group by s.id
