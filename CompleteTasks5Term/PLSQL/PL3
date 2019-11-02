@@ -1,0 +1,7 @@
+DECLARE
+a int;
+b int;
+BEGIN
+a:=5;b:=1;
+dbms_output.put_line(a+b); 
+END;
