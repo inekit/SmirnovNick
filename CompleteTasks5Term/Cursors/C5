@@ -1,0 +1,13 @@
+create or replace PROCEDURE C5
+AS
+cursor a
+is
+select max(a.name) n from animals a, childs c
+where c.child_id=a.id
+and (select id from animals a where a.id =c.parent_id) is not null
+group by a.name;
+BEGIN
+for i in a loop
+dbms_output.put_line(i.n );
+end loop;
+END;
