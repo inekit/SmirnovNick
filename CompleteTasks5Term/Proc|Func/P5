@@ -1,0 +1,10 @@
+create or replace PROCEDURE NUMBER5 (idd in number)
+AS
+cursor an is
+ select a.id id,a.adress ad from av_an an,aviary a
+ where an.av_id=a.id and an.an_id=idd;
+BEGIN
+for a in an loop
+dbms_output.put_line(a.id||'  '|| a.ad);
+end loop;
+END;
