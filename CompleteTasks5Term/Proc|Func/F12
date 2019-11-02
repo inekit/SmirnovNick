@@ -1,0 +1,10 @@
+create or replace FUNCTION F12 (cs in varchar)
+RETURN NUMBER
+AS
+c number;
+BEGIN
+select count(*) into c
+from animals a,species s
+where conservation_status=cs and a.species_id=s.id;
+return c;
+END;
