@@ -1,0 +1,13 @@
+create or replace FUNCTION F10
+RETURN NUMBER
+AS
+c number;
+BEGIN
+select s.name into c
+from animals a,species s
+where s.id=a.species_id
+group by s.name, s.id
+order by avg(height)
+fetch first 1 rows only;
+return c;
+END;
