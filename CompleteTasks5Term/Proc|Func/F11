@@ -1,0 +1,11 @@
+create or replace FUNCTION F10
+RETURN NUMBER
+AS
+c number;
+BEGIN
+select id into c
+from animals a
+order by birth desc
+fetch first 1 rows only;
+return c;
+END;
