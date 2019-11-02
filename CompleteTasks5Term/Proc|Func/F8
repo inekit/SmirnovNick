@@ -1,0 +1,10 @@
+create or replace FUNCTION F8 (idd in number)
+RETURN NUMBER
+AS
+c number;
+BEGIN
+select avg(weight) into c
+from animals a,species s
+where s.id=a.species_id and s.id=idd;
+return c;
+END;
