@@ -1,0 +1,16 @@
+create or replace PROCEDURE gam
+AS
+cursor an is
+ select a_id,count(k_id) k,name
+ from k_a,animals a where a.id=k_a.a_id
+ group by a_id,name;
+BEGIN
+for a in an loop
+dbms_output.put_line(a.name||'  '|| a.k);
+end loop;
+END;
+#7
+DECLARE
+BEGIN
+GAM7();
+END;
