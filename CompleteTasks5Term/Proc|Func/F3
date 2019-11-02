@@ -1,0 +1,14 @@
+create or replace FUNCTION F3
+RETURN NUMBER
+AS
+c NUMBER;
+cursor an is
+ select * from animals;
+BEGIN
+c:=0;
+for a in an loop
+c:=c+1;
+
+END LOOP;
+Return c;
+END;
