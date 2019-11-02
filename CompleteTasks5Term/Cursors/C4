@@ -1,0 +1,12 @@
+create or replace PROCEDURE C4
+AS
+cursor a
+is
+select a.name n, s.name o from animals a, species s
+where s.id=a.species_id 
+and a.length>80;
+BEGIN
+for i in a loop
+dbms_output.put_line(i.n || ' из отряда ' || i.o);
+end loop;
+END;
