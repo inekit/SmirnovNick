@@ -1,0 +1,6 @@
+DECLARE
+a int;
+BEGIN
+a:=3;
+dbms_output.put_line(pname(a)); 
+END;
