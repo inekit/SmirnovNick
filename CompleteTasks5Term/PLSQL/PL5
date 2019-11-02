@@ -1,0 +1,37 @@
+DECLARE
+a int;
+b int;
+BEGIN
+a:=19;
+LOOP
+a:=a+1;
+dbms_output.put_line(a*a); 
+EXIT WHEN (a=33);
+END LOOP;
+END;
+/
+/
+/
+DECLARE
+a int;
+b int;
+BEGIN
+a:=19;
+While (a<33)
+LOOP
+a:=a+1;
+dbms_output.put_line(a*a); 
+END LOOP;
+END;
+/
+/
+/
+DECLARE
+a int;
+b int;
+BEGIN
+a:=20;
+For a IN 20..33 LOOP
+dbms_output.put_line(a*a); 
+END LOOP;
+END;
