@@ -1,4 +1,4 @@
-create or replace FUNCTION F15
+create or replace FUNCTION F15 (idd in number)
 RETURN F_TYPE
 AS
 c F_TYPE2:= F_TYPE2();
@@ -6,9 +6,9 @@ BEGIN
 select k.name,s.name into c.name_k,c.name_S
 from keepers k,k_a,species s, animals a 
 where k.id=k_a.k_id and k_a.a_id=a.id and a.species_id=s.id
-and k.id=1
+and k.id=idd
 group by s.id,s.name,k.name
 order by count(a.id) desc
-fetch first 1 rows only
+fetch first 1 rows only;
 return c;
 END;
