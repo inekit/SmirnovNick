@@ -1,0 +1,13 @@
+create or replace PROCEDURE C6
+AS
+cursor a
+is
+select k.name n from animals a, species s, genus g, family f, order_a o, k_a, keepers k
+where s.id=a.species_id and s.genus_id=g.id and g.family_id=f.id and f.order_a_id=o.id and k_a.a_id=a.id and k_a.k_id=k_id
+and (o.name='Грызуны' or o.name='Хищники')
+group by k.name;
+BEGIN
+for i in a loop
+dbms_output.put_line(i.n );
+end loop;
+END;
