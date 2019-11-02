@@ -1,0 +1,10 @@
+create or replace FUNCTION F6(idd in number)
+RETURN NUMBER
+AS
+c number;
+BEGIN
+select count(*) into c
+from g_a
+where g_a.g_id=idd;
+return c;
+END;
