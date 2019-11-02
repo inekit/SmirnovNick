@@ -1,0 +1,10 @@
+create or replace PROCEDURE number6 (st varchar)
+AS
+cursor an is
+ select name from species where conservation_status=st;
+BEGIN
+for a in an loop
+dbms_output.put(a.name||', ');
+end loop;
+dbms_output.new_line;
+END;
