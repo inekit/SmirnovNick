@@ -1,0 +1,13 @@
+create or replace FUNCTION F9
+RETURN NUMBER
+AS
+c number;
+BEGIN
+select s.id into c
+from animals a,species s
+where s.id=a.species_id
+group by s.id
+order by avg(length) desc
+fetch first 1 rows only;
+return c;
+END;
