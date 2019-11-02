@@ -1,0 +1,10 @@
+create or replace FUNCTION F4(idd in number)
+RETURN NUMBER
+AS
+ c number;
+BEGIN
+select count(*) into c from animals a,species s,genus g,family f,order_a o
+ where a.species_id=s.id and s.genus_id=g.id and f.id=g.family_id and f.order_a_id=o.id 
+ and o.id=idd;
+return c;
+END;
