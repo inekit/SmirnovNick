@@ -1,0 +1,13 @@
+create or replace FUNCTION F14
+RETURN F_TYPE
+AS
+c F_TYPE:= F_TYPE();
+BEGIN
+select k.name,a.name,finish_d into c.name_K, c.name_A, c.date_F
+from animals a,keepers k,k_a
+where a.id=k_a.a_id and k.id=k_a.k_id 
+and finish_d>sysdate
+order by finish_d
+fetch first 1 rows only;
+return c;
+END;
