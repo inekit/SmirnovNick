@@ -1,0 +1,28 @@
+DECLARE
+a int;
+b int;
+BEGIN
+a:=3;
+IF a=5 THEN dbms_output.put_line('Îòëè÷íî'); 
+ELSIF a=4 THEN dbms_output.put_line('Õîðîøî'); 
+ELSIF a=3 THEN dbms_output.put_line('Óäîâëåòâîðèòåëüíî'); 
+ELSIF a=2 THEN dbms_output.put_line('Íåóä'); 
+ELSE dbms_output.put_line('Íåâåðíàÿ îöåíêà'); 
+END IF;
+END;
+/
+/
+/
+DECLARE
+a int;
+b int;
+BEGIN
+a:=2;
+CASE a
+WHEN 5 THEN dbms_output.put_line('Îòëè÷íî'); 
+WHEN 4 THEN dbms_output.put_line('Õîðîøî'); 
+WHEN 3 THEN dbms_output.put_line('Óäîâëåòâîðèòåëüíî'); 
+WHEN 2 THEN dbms_output.put_line('Íåóä'); 
+ELSE dbms_output.put_line('Íåâåðíàÿ îöåíêà'); 
+END CASE;
+END;
