@@ -1,1 +1,14 @@
-
+create or replace TRIGGER onAnimalsUpdate
+BEFORE UPDATE OF name ON animals
+FOR EACH ROW
+DECLARE
+ cant_change_name EXCEPTION;
+BEGIN
+ IF :new.name<>:old.name THEN
+ RAISE cant_change_name;
+ END IF;
+EXCEPTION
+ WHEN cant_change_name THEN
+  dbms_output.put_line('Ошибка 20325: Нельзя изменить имя');
+  :new.name:=:old.name;
+END;
