@@ -1,0 +1,10 @@
+create or replace FUNCTION F5(idd in number)
+RETURN NUMBER
+AS
+c number;
+BEGIN
+select count(*) into c
+from childs c
+where c.parent_id=idd;
+return c;
+END;
