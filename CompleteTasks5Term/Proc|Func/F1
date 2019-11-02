@@ -1,1 +1,15 @@
+create or replace FUNCTION call (ca in number)
+RETURN NUMBER
+AS
+c NUMBER;
+BEGIN
+c:=ca;
+while (c<>1)
+LOOP
+if c mod 2 =0 then c:=c/2;
+elsif c mod 2 = 1 then c:=c*3+1;
+end if;
+dbms_output.put_line(c); 
 
+END LOOP;
+END;
