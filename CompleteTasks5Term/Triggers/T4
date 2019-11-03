@@ -1,0 +1,35 @@
+create or replace TRIGGER onKAInsert
+INSTEAD OF INSERT
+ON viewtask4
+DECLARE
+  psat EXCEPTION;
+ CURSOR c IS
+		SELECT * FROM k_a
+       where a_id=:new.a_id and k_id =:new.k_id ;
+aa int;
+a int;
+BEGIN
+a:=0;
+aa:=0;
+if :new.k_id is not null and :new.a_id is not null then
+ for i in c loop
+  if :new.k_id=i.k_id and :new.a_id=i.a_id then 
+   a:=1; 
+  end if;
+ end loop;
+end if;
+if a=0 then
+insert into k_a values (:new.k_id,:new.a_id,:new.start_d,:new.finish_d);
+else
+ for i in c loop
+  if :new.start_d<=i.finish_d or :new.finish_d>=i.start_d then aa:=1;  end if;
+ end loop;
+ if aa=0 then
+  insert into k_a values (:new.k_id,:new.a_id,:new.start_d,:new.finish_d);
+  else raise psat;
+ end if;
+end if;
+EXCEPTION
+  WHEN psat THEN
+  dbms_output.put_line('Ошибка 20347: Опекун уже занят');
+END;
