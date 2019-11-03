@@ -1,0 +1,68 @@
+create or replace TRIGGER onViewUpdatee
+INSTEAD OF INSERT
+ON viewtask2
+DECLARE
+ cant_change_name EXCEPTION;
+  psat EXCEPTION;
+ CURSOR get_animals IS
+		SELECT * FROM animals;
+	 CURSOR get_guardians IS
+		SELECT * FROM guardians;
+ CURSOR get_ga IS
+		SELECT * FROM g_a;
+aa int;
+gg int;
+ga int;
+g2g int;
+igg int;
+BEGIN
+aa:=0; gg:=0; ga:=0; g2g:=0; igg:=0;
+ IF :new.aid is not null THEN
+
+    FOR a IN get_animals LOOP
+	IF :new.aid=a.id THEN
+    aa:=1;
+    END IF;
+    END LOOP;
+else
+     RAISE cant_change_name;
+     END IF;
+IF :new.gid is not null THEN
+   FOR g IN get_guardians LOOP
+	IF :new.gid=g.id THEN
+    gg:=1;
+    END IF;
+   END LOOP;
+else
+ RAISE cant_change_name;
+END IF;
+IF :new.gn is not null THEN
+   igg:=1;
+   FOR g IN get_guardians LOOP
+	IF :new.gn<>g.name and :new.gid=g.id THEN
+    g2g:=2;
+    END IF;
+   END LOOP;
+END IF;
+IF aa=1 and gg=1 and g2g=0 then 
+        FOR gag IN get_ga LOOP
+	        IF :new.gid=gag.g_id and :new.aid=gag.a_id THEN
+            ga:=1;
+            END IF;
+        END LOOP;
+        if ga=0 then
+        insert into g_a (g_id,a_id) values (:new.gid,:new.aid) ; 
+        end if;
+ elsif aa=1 and gg=1 and g2g=2 then 
+raise psat; 
+elsif aa=1 and gg=0 and igg=1 then 
+insert into guardians (id,name) values (:new.gid,:new.gn) ; 
+insert into g_a (g_id,a_id) values (:new.gid,:new.aid) ; 
+end if;
+ 
+EXCEPTION
+ WHEN cant_change_name THEN
+  dbms_output.put_line('Ошибка 20325: Нельзя изменить имя');
+  WHEN psat THEN
+  dbms_output.put_line('Ошибка 20423: Нет такого опекуна');
+END;
