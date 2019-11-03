@@ -1,0 +1,23 @@
+create or replace TRIGGER onKeepersDelete
+BEFORE DELETE
+ON keepers
+FOR EACH ROW 
+DECLARE
+ cant_change_name EXCEPTION;
+  psat EXCEPTION;
+  cursor c 
+  is 
+  select * from k_a
+  where k_id=:old.id;
+BEGIN
+ for i in c loop
+ insert into arck_a (k_id,a_id,startd,finishd) values (i.k_id,i.a_id,i.start_d,i.finish_d);
+ delete from k_a where k_id=i.k_id and a_id=i.a_id;
+ end loop;
+ insert into arckeepers (id,name,surname,patronymic,birth,experience, delete_d) values (:old.id,:old.name,:old.surname,:old.patronymic,:old.birth,:old.experience,sysdate);
+EXCEPTION
+ WHEN cant_change_name THEN
+  dbms_output.put_line('Ошибка 20325: Нельзя изменить имя');
+  WHEN psat THEN
+  dbms_output.put_line('Ошибка 20423: Нет такого опекуна');
+END;
